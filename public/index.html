@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SignUp and Login</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+</head>
+<body>
+    <div class="big">
+        <div class="small">
+            <form action="">
+                <div id="sign-up-box">
+                    <div class="logo-div">
+                        <h2>Create Account</h2>
+                    </div>
+                    
+                    <div class="all-input">
+                        <div class="input-div">
+                            <input type="text" name="" id="user-name" placeholder="Username" required>
+                            <input type="email" name="" id="user-email" placeholder="Email" required>
+                            <input type="password" name="" id="user-password" placeholder="Password" required>
+                            <input type="password" name="" id="confirm-password" placeholder="Confirm password" required>
+                        </div>
+                    </div>
+                    <div id="signup-msg"></div>
+                    <div class="sign-up-btn-div">
+                        <button onclick="signUp(event)">Sign Up</button>
+                    </div>
+                    <div class="registered">
+                        <p>Already have an account? <span onclick="loginPage()">Login Here</span></p>
+                    </div>
+                    <div id="loading-div">
+                        <div class="loader"></i></div>
+                    </div>
+                </div>
+            </form>
+
+
+            <form action="">
+                <div id="login-box">
+                    <div class="logo-div">
+                        <h2>Sign In</h2>
+                    </div>
+                    
+                    <div class="all-input">
+                        <div class="input-div">
+                            <input type="email" name="" id="loginEm" placeholder="Email" required>
+                            <input type="password" name="" id="loginPass" placeholder="Password" required>
+                        </div>
+                    </div>
+    
+                    <div class="f-password">Forget password?</div>
+                    <div id="login-msg"></div>
+                    <div class="login-btn-div">
+                        <button type="submit" onclick="login(event)">Login</button>
+                    </div>
+    
+                    <div class="registered">
+                        <p>You don't have an account yet? <span onclick="signUpPage(event)">SignUp Here</span></p>
+                    </div>
+    
+                    <div id="loading-divL">
+                        <div class="loader"></div>
+                    </div>
+
+                    <hr>
+
+
+                    <div class="google-lgn">
+                      <button onclick="signGoogle(event)">Sign up with Google</button>
+                    </div>
+                </div>
+
+            </form>
+            
+
+            
+        </div>
+    </div>
+
+    // firebase authenticatiom
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.21.0/firebase-app.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyAyhA9CWzRZ9VB5dVEFTyozxNMj_amIvMc",
+    authDomain: "project-ap-afcb6.firebaseapp.com",
+    projectId: "project-ap-afcb6",
+    storageBucket: "project-ap-afcb6.appspot.com",
+    messagingSenderId: "342809190664",
+    appId: "1:342809190664:web:e98cd981b5f40de89a0cbd"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+</script>
+
+    <script src="script.js"></script>
+</body>
+</html>

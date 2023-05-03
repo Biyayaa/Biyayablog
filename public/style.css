@@ -1,0 +1,149 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #f2f2f2;
+    font-family: Arial, sans-serif;
+}
+
+.big {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.small {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    width: 400px;
+}
+
+.logo-div {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.logo-div h2 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+}
+
+.all-input {
+    margin-bottom: 20px;
+}
+
+.input-div {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-div input {
+    background-color: #f2f2f2;
+    border: none;
+    border-radius: 5px;
+    color: #333;
+    font-size: 16px;
+    margin-bottom: 10px;
+    padding: 10px;
+}
+
+.input-div input:focus {
+    outline: none;
+}
+
+.sign-up-btn-div,
+.login-btn-div {
+    text-align: center;
+}
+
+button {
+    background-color: #4caf50;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 10px 20px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #3e8e41;
+}
+
+.registered {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.registered p {
+    font-size: 14px;
+    color: #333;
+}
+
+.registered span {
+    color: #4caf50;
+    cursor: pointer;
+}
+
+.f-password {
+    text-align: right;
+    margin-bottom: 20px;
+}
+
+#loading-div,
+#loading-divL {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.loader {
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #4caf50;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+#signup-msg,
+#login-msg {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#success-msg {
+    color: #4caf50;
+}
+
+#failed-msg {
+    color: #f44336;
+}
+
+.google-lgn{
+    margin: 20px auto;
+    text-align: center;
+}
+
+.google-lgn button{
+    background-color: rgba(255, 0, 0, 0.397);
+}
