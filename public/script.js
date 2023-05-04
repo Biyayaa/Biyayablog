@@ -49,6 +49,8 @@ function signUp(e) {
       confirmPassword: confirmPasswordInput.value,
     };
 
+    console.log(user.username);
+
     // Get the array of registered users from localStorage or create an empty array if it doesn't exist
     let registeredUsers = JSON.parse(localStorage.getItem("members")) || [];
 
@@ -63,6 +65,37 @@ function signUp(e) {
     signUpMessage.innerHTML = `
       <p id="success-msg">Sign up successful!!!</p>
     `;
+
+
+    firebase.auth().createUserWithEmailAndPassword(user.email, user.password)
+  .then((userCredential) => {
+    // Signed in 
+    var user = userCredential.user;
+    alert("user sign up succesful")
+
+     // Log in the user after sign up
+     firebase.auth().signInWithEmailAndPassword(user.email, user.password)
+     .then((userCredential) => {
+       // Signed in 
+       var user = userCredential.user;
+       alert("User sign in successful")
+     })
+
+       // Redirect to the dashboard page and store the current user in localStorage
+       window.location.href = "messenger.html";
+       window.localStorage.setItem("currentUser", JSON.stringify(user));
+
+
+    // ...
+  })
+  .catch((error) => {
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    // ..
+    alert("Try again")
+  });
+
+
     setTimeout(() => {
       signUpBox.style.display = "none";
       loginBox.style.display = "block";
@@ -84,6 +117,8 @@ function signUp(e) {
       signUpMessage.style.display = "none";
     }, 3000);
   }
+
+  
 }
 
 // Handle the login process
@@ -133,12 +168,15 @@ function login(ev) {
 
 
 
-  firebase.auth().createUserWithEmailAndPassword(mail, pass)
+  firebase.auth().signInWithEmailAndPassword(mail, pass)
   .then((userCredential) => {
     // Signed in 
-    var user = userCredential.user;
-    alert("user sign up succesfull")
+    let user = userCredential.user;
+    alert("user sign in succesfull")
     // ...
+
+    window.location.href = "messenger.html";
+      window.localStorage.setItem("currentUser", JSON.stringify(user));
   })
   .catch((error) => {
     var errorCode = error.code;
@@ -166,7 +204,9 @@ function signGoogle(ev) {
     var user = result.user;
     // IdP data available in result.additionalUserInfo.profile.
       // ...
+
       console.log(user);
+      window.location.href = "messenger.html";
   }).catch((error) => {
     // Handle Errors here.
     var errorCode = error.code;
