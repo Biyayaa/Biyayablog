@@ -5,8 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-auth.js"></script>
+    <link rel="stylesheet" href="messenger.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
 
 </head>
 <body>
@@ -14,9 +17,28 @@
     <div id="welcome">
 
     </div>
+
+
+    <div class="post-container">
+        <div class="profile-pic">
+            <span class="pp"></span>
+
+        </div>
+
+        <div class="twitter-post">
+            <form>
+              <input id="tweet" class="what" placeholder="What's happening?"></input>
+              <hr>
+              <button type="submit" onclick="postTweet(event)">Tweet</button>
+            </form>
+        </div>
+    </div>
+
+
+    <div id="tweetTimeline">
+    </div>
+
     
-
-
     <script src="messenger.js"></script>
 
     

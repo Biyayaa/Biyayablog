@@ -1,0 +1,52 @@
+.post-container{
+    display: flex;
+}
+
+.profile-pic{
+    width: 70px;
+    height: 70px;
+    border: 1px solid blue;
+    border-radius: 50px;
+}
+
+
+.twitter-post {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+  }
+  
+  .twitter-post form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .twitter-post textarea {
+    border: none;
+    resize: none;
+    height: 100px;
+    font-size: 18px;
+    margin-bottom: 10px;
+    padding: 10px;
+  }
+  
+  .twitter-post textarea:focus {
+    outline: none;
+  }
+  
+  .twitter-post button {
+    background-color: #1da1f2;
+    border: none;
+    border-radius: 25px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+  
+  .twitter-post button:hover {
+    background-color: #0c8ad6;
+  }
+  

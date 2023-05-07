@@ -79,11 +79,13 @@ function signUp(e) {
        // Signed in 
        var user = userCredential.user;
        alert("User sign in successful")
-     })
 
        // Redirect to the dashboard page and store the current user in localStorage
        window.location.href = "messenger.html";
        window.localStorage.setItem("currentUser", JSON.stringify(user));
+     })
+
+       
 
 
     // ...
