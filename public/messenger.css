@@ -1,52 +1,79 @@
-.post-container{
-    display: flex;
-}
-
-.profile-pic{
-    width: 70px;
-    height: 70px;
-    border: 1px solid blue;
-    border-radius: 50px;
-}
-
-
-.twitter-post {
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    padding: 10px;
-  }
-  
-  .twitter-post form {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .twitter-post textarea {
-    border: none;
-    resize: none;
-    height: 100px;
-    font-size: 18px;
-    margin-bottom: 10px;
-    padding: 10px;
-  }
-  
-  .twitter-post textarea:focus {
-    outline: none;
-  }
-  
-  .twitter-post button {
-    background-color: #1da1f2;
-    border: none;
-    border-radius: 25px;
-    color: #fff;
+body {
+    background-color: #f5f8fa;
+    font-family: Arial, sans-serif;
     font-size: 16px;
-    font-weight: bold;
+    color: #14171a;
+  }
+  
+  #welcome {
+    background-color: white;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2);
+  }
+  
+  .post-container {
+    display: flex;
+    padding: 10px;
+    background-color: white;
+    margin-bottom: 10px;
+    box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2);
+  }
+  
+  .profile-pic {
+    margin-right: 10px;
+  }
+  
+  .pp {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    background-color: #1da1f2;
+    border-radius: 50%;
+  }
+  
+  .twitter-post {
+    flex: 1;
+  }
+  
+  .what {
+    width: 100%;
+    border: none;
+    font-size: 20px;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  
+  button {
+    background-color: #1da1f2;
+    color: white;
+    border: none;
     padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 16px;
     cursor: pointer;
   }
   
-  .twitter-post button:hover {
-    background-color: #0c8ad6;
+  hr {
+    border: none;
+    border-bottom: 1px solid #e6ecf0;
+    margin: 10px 0;
+  }
+  
+  #tweetTimeline {
+    background-color: white;
+    padding: 10px;
+    box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2);
+  }
+  
+  .timestamp {
+    font-size: 14px;
+    color: #8899a6;
+    margin-bottom: 5px;
+  }
+  
+  .email {
+    font-size: 14px;
+    color: #8899a6;
   }
   

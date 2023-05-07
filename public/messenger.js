@@ -12,7 +12,6 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-
 // Get the currently logged-in user
 firebase.auth().onAuthStateChanged(function (user) {
   if (user) {
@@ -23,46 +22,71 @@ firebase.auth().onAuthStateChanged(function (user) {
   }
 });
 
+
+
+
 let tweet = document.getElementById("tweet");
 let tweetTimeline = document.getElementById("tweetTimeline");
 
-// Listen for changes to the tweets collection and update the tweetTimeline element
-db.collection("tweets").onSnapshot((querySnapshot) => {
-  // Clear the current contents of the tweetTimeline element
-  tweetTimeline.innerHTML = "";
-
-  // Loop through the documents in the query snapshot
-  querySnapshot.forEach((doc) => {
-    // Get the data for the current document
-    let data = doc.data();
-
-    // Create a new tweet element with the tweet and email
-    let tweetElement = document.createElement("div");
-    tweetElement.innerHTML = `<p>${data.tweet}</p><small>Posted by ${data.email}</small>`;
-
-    // Add the tweet element to the tweetTimeline element
-    tweetTimeline.appendChild(tweetElement);
-  });
-});
-
+// Function to format the timestamp as "how long ago" or the date if it's over 24 hours
+function formatTimestamp(timestamp) {
+  let date = timestamp.toDate();
+  let now = new Date();
+  let diff = (now - date) / 1000; // Difference in seconds
+  if (diff < 60) {
+    return "just now";
+  } else if (diff < 60 * 60) {
+    let minutes = Math.floor(diff / 60);
+    return `${minutes} ${minutes > 1 ? "minutes" : "minute"} ago`;
+  } else if (diff < 60 * 60 * 24) {
+    let hours = Math.floor(diff / (60 * 60));
+    return `${hours} ${hours > 1 ? "hours" : "hour"} ago`;
+  } else {
+    let day = date.getDate();
+    let month = date.toLocaleString("default", { month: "short" });
+    let year = date.getFullYear();
+    return `${day} ${month} ${year}`;
+  }
+}
 
 function postTweet(ev) {
-    ev.preventDefault();
-  let data = {
+  ev.preventDefault();
+  let tweetData = {
     tweet: tweet.value,
     email: firebase.auth().currentUser.email,
+    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
   };
-  console.log(data);
-  
-  // Add a new document in collection "cities"
+  console.log(tweetData);
+
+  // Add a new document in collection "tweets"
   db.collection("tweets")
     .doc()
-    .set(data)
+    .set(tweetData)
     .then(() => {
       console.log("Document successfully written!");
-    //   window.location.href = "blog.html";
     })
     .catch((error) => {
       console.error("Error writing document: ", error);
     });
 }
+
+db.collection("tweets")
+  .orderBy("timestamp", "desc")
+  .onSnapshot((querySnapshot) => {
+    tweetTimeline.innerHTML = "";
+    querySnapshot.forEach((doc) => {
+      let tweetData = doc.data();
+
+      // Create a new tweet element with the tweet and email
+      let tweetElement = document.createElement("div");
+      tweetElement.innerHTML = `<p>${tweetData.tweet}</p>
+    <p class="timestamp">${formatTimestamp(tweetData.timestamp)}</p>
+    <p class="email">${tweetData.email}</p>`;
+
+      // Add the tweet element to the tweetTimeline element
+      tweetTimeline.appendChild(tweetElement);
+    });
+  })
+  .catch((error) => {
+    console.error("Error getting tweets: ", error);
+  });
