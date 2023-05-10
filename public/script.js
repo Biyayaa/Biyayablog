@@ -32,95 +32,53 @@ function signUpPage() {
 }
 
 // Handle the sign up process
-function signUp(e) {
+function signUp(ev) {
+  ev.preventDefault();
+  let username = document.getElementById("user-name");
+  let email = document.getElementById("user-email");
+  let pass = document.getElementById("user-password");
 
-  e.preventDefault()
-  // Check if the password and confirm password fields match and the Username and email fields are not empty
   if (
     passwordInput.value === confirmPasswordInput.value &&
     userNameInput.value != "" &&
     emailInput.value != ""
   ) {
-    // Create a user object with the input values
-    let user = {
-      username: userNameInput.value,
-      email: emailInput.value,
-      password: passwordInput.value,
-      confirmPassword: confirmPasswordInput.value,
-    };
-
-    console.log(user.username);
-
-    // Get the array of registered users from localStorage or create an empty array if it doesn't exist
-    let registeredUsers = JSON.parse(localStorage.getItem("members")) || [];
-
-    // Add the new user object to the array of registered users
-    registeredUsers.push(user);
-
-    // Save the updated array of registered users to localStorage
-    localStorage.setItem("members", JSON.stringify(registeredUsers));
-
-    // Display a success message and hide the sign up box after 2 seconds
     loadingDiv.style.display = "block";
-    signUpMessage.innerHTML = `
-      <p id="success-msg">Sign up successful!!!</p>
-    `;
-
-
-    firebase.auth().createUserWithEmailAndPassword(user.email, user.password)
-  .then((userCredential) => {
-    // Signed in 
-    var user = userCredential.user;
-    alert("user sign up succesful")
-
-     // Log in the user after sign up
-     firebase.auth().signInWithEmailAndPassword(user.email, user.password)
-     .then((userCredential) => {
-       // Signed in 
-       var user = userCredential.user;
-       alert("User sign in successful")
-
-       // Redirect to the dashboard page and store the current user in localStorage
-       window.location.href = "messenger.html";
-       window.localStorage.setItem("currentUser", JSON.stringify(user));
-     })
-
-       
-
-
-    // ...
-  })
-  .catch((error) => {
-    var errorCode = error.code;
-    var errorMessage = error.message;
-    // ..
-    alert("Try again")
-  });
-
-
     setTimeout(() => {
-      signUpBox.style.display = "none";
-      loginBox.style.display = "block";
       loadingDiv.style.display = "none";
-      signUpMessage.style.display = "none";
+      signUpMessage.innerHTML = `
+         <p id="success-msg">Sign up successful!!!</p>
+       `;
     }, 2000);
 
-    // Clear the input fields
-    userNameInput.value = "";
-    emailInput.value = "";
-    passwordInput.value = "";
-    confirmPasswordInput.value = "";
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(email.value, pass.value)
+      .then((userCredential) => {
+        // Signed in
+        var user = userCredential.user;
+        user
+          .updateProfile({
+            displayName: username.value,
+          })
+          .then(() => {
+            console.log(user);
+            alert("user sign-up sucessful")
+            signUpBox.style.display = "none";
+            loginBox.style.display = "block";
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      })
+      .catch((error) => {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        console.log(errorMessage);
+      });
   } else {
-    // Display a failure message if the input values are invalid
-    signUpMessage.innerHTML = `
-      <p id="failed-msg">Sign up failed!!!</p>
-    `;
-    setTimeout(() => {
-      signUpMessage.style.display = "none";
-    }, 3000);
+    alert("passwords don't match");
   }
-
-  
 }
 
 // Handle the login process
@@ -184,7 +142,7 @@ function login(ev) {
     var errorCode = error.code;
     var errorMessage = error.message;
     // ..
-    alert("Try again")
+    alert(errorCode, errorMessage)
   });
 }
 
@@ -208,7 +166,7 @@ function signGoogle(ev) {
       // ...
 
       console.log(user);
-      window.location.href = "messenger.html";
+      
   }).catch((error) => {
     // Handle Errors here.
     var errorCode = error.code;
@@ -237,9 +195,9 @@ function signGoogle(ev) {
   const app = firebase.initializeApp(firebaseConfig);
   var provider = new firebase.auth.GoogleAuthProvider();
 
-// Get the current user information from localStorage
-function getUserInfo() {
-  let currentUser = JSON.parse(localStorage.getItem("currentUser"));
-  console.log(currentUser);
-}
-getUserInfo();
+// // Get the current user information from localStorage
+// function getUserInfo() {
+//   let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+//   console.log(currentUser);
+// }
+// getUserInfo();

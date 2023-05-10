@@ -10,20 +10,77 @@ const firebaseConfig = {
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
+let storage = firebase.storage().ref()
 const db = firebase.firestore();
 
+
 // Get the currently logged-in user
+let thisUser;
 firebase.auth().onAuthStateChanged(function (user) {
   if (user) {
-    let me = user.email;
-    console.log(me);
+    thisUser = user;
     let welcome = document.getElementById("welcome");
-    welcome.innerHTML = `<h1>Welcome ${user.email}</h1>`;
+    welcome.innerHTML = `<h1>Welcome ${user.displayName}</h1>`;
   }
 });
 
+function pickFile(e) {
+  let reader = new FileReader();
+  let file = e.target.files[0];
+  console.log(file);
+  reader.addEventListener("load", (e) => {
+    console.log(e);
+  });
+  if (file) {
+    reader.readAsDataURL(file);
+  }
+}
 
+let avatar = document.getElementById("avatar");
+function update(ev) {
+  ev.preventDefault();
+  console.log(thisUser);
+  let file = avatar.files[0];
+  let imgName = avatar.files[0].name;
 
+  var uploadTask = storage.child(imgName).put(file);
+  uploadTask.on(
+    "state_changed",
+    (snapshot) => {
+      var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      console.log("Upload is " + progress + "% done");
+      switch (snapshot.state) {
+        case firebase.storage.TaskState.PAUSED: // or 'paused'
+          console.log("Upload is paused");
+          break;
+        case firebase.storage.TaskState.RUNNING: // or 'running'
+          console.log("Upload is running");
+          break;
+      }
+    },
+    (error) => {
+      // Handle unsuccessful uploads
+      console.log(error);
+    },
+    () => {
+      uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+        console.log("File available at", downloadURL);
+        thisUser
+          .updateProfile({
+            photoURL: downloadURL,
+          })
+          .then(() => {
+            console.log("Profile successfully updated");
+          })
+          .catch((error) => {
+            console.log(error.message);
+          });
+      });
+    }
+  );
+let pp = document.getElementById("pp");
+pp.style.backgroundImage = thisUser.photoURL;
+}
 
 let tweet = document.getElementById("tweet");
 let tweetTimeline = document.getElementById("tweetTimeline");
@@ -58,6 +115,8 @@ function postTweet(ev) {
   };
   console.log(tweetData);
 
+  tweet.value = "";
+
   // Add a new document in collection "tweets"
   db.collection("tweets")
     .doc()
@@ -79,9 +138,20 @@ db.collection("tweets")
 
       // Create a new tweet element with the tweet and email
       let tweetElement = document.createElement("div");
-      tweetElement.innerHTML = `<p>${tweetData.tweet}</p>
-    <p class="timestamp">${formatTimestamp(tweetData.timestamp)}</p>
-    <p class="email">${tweetData.email}</p>`;
+      tweetElement.innerHTML = `<div class="user-tweet">
+      <div user-pp>
+      <span class="pp"></span>
+      </div>
+
+      <div class="user-tweet-details">
+      <div class="user-name-time">
+      <p class="email">${tweetData.email}</p>
+      <p class="timestamp">.${formatTimestamp(tweetData.timestamp)}</p>
+      </div>
+      
+      <p class="tweet">${tweetData.tweet}</p>
+      </div>
+       <hr></div>`;
 
       // Add the tweet element to the tweetTimeline element
       tweetTimeline.appendChild(tweetElement);

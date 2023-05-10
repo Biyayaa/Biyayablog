@@ -9,19 +9,26 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script
+src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
 
 
 </head>
 <body>
 
     <div id="welcome">
-
+    </div>
+    <div>
+        <form action="">
+            <input onchange="pickFile(event)" id="avatar" accept="image/jpg" type="file">
+            <button onclick="update(event)">update</button>
+        </form>
     </div>
 
 
     <div class="post-container">
         <div class="profile-pic">
-            <span class="pp"></span>
+            <span class="pp" id="pp"></span>
 
         </div>
 
