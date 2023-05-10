@@ -88,7 +88,7 @@ function update(ev) {
         });
       }
     );
-  }
+}
   
 
 let tweet = document.getElementById("tweet");
@@ -120,6 +120,7 @@ function postTweet(ev) {
     let tweetData = {
       tweet: tweet.value,
       email: firebase.auth().currentUser.email,
+      photoURL: firebase.auth().currentUser.photoURL,
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
     };
     console.log(tweetData);
@@ -145,11 +146,11 @@ function postTweet(ev) {
     querySnapshot.forEach((doc) => {
       let tweetData = doc.data();
 
-      // Create a new tweet element with the tweet and email
+      // Create a new tweet element with the tweet, photoURL and email
       let tweetElement = document.createElement("div");
       tweetElement.innerHTML = `<div class="user-tweet">
       <div user-pp>
-      <img src="${avatar}" class="pp">
+      <img src="${tweetData.photoURL}" class="pp">
       </div>
 
       <div class="user-tweet-details">
