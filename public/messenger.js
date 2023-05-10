@@ -16,11 +16,15 @@ const db = firebase.firestore();
 
 // Get the currently logged-in user
 let thisUser;
+let avatar;
 firebase.auth().onAuthStateChanged(function (user) {
   if (user) {
+    avatar = user.photoURL;
     thisUser = user;
     let welcome = document.getElementById("welcome");
-    welcome.innerHTML = `<h1>Welcome ${user.displayName}</h1>`;
+    welcome.innerHTML = `<h1>Welcome ${user.displayName}</h1>
+    
+    <img src="${user.photoURL} class="pp" width="50">`;
   }
 });
 
@@ -36,51 +40,56 @@ function pickFile(e) {
   }
 }
 
-let avatar = document.getElementById("avatar");
 function update(ev) {
-  ev.preventDefault();
-  console.log(thisUser);
-  let file = avatar.files[0];
-  let imgName = avatar.files[0].name;
-
-  var uploadTask = storage.child(imgName).put(file);
-  uploadTask.on(
-    "state_changed",
-    (snapshot) => {
-      var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-      console.log("Upload is " + progress + "% done");
-      switch (snapshot.state) {
-        case firebase.storage.TaskState.PAUSED: // or 'paused'
-          console.log("Upload is paused");
-          break;
-        case firebase.storage.TaskState.RUNNING: // or 'running'
-          console.log("Upload is running");
-          break;
+    let avatar = document.getElementById("avatar");
+    ev.preventDefault();
+    console.log(thisUser);
+    let file = avatar.files[0];
+    let imgName = avatar.files[0].name;
+  
+    // Generate a unique ID for the user
+    const userId = firebase.auth().currentUser.uid;
+  
+    // Modify the file path to include the user's ID
+    const filePath = `user_avatars/${userId}/${imgName}`;
+  
+    var uploadTask = storage.child(filePath).put(file);
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log("Upload is " + progress + "% done");
+        switch (snapshot.state) {
+          case firebase.storage.TaskState.PAUSED: // or 'paused'
+            console.log("Upload is paused");
+            break;
+          case firebase.storage.TaskState.RUNNING: // or 'running'
+            console.log("Upload is running");
+            break;
+        }
+      },
+      (error) => {
+        // Handle unsuccessful uploads
+        console.log(error);
+      },
+      () => {
+        uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+          console.log("File available at", downloadURL);
+          thisUser
+            .updateProfile({
+              photoURL: downloadURL,
+            })
+            .then(() => {
+              console.log("Profile successfully updated");
+            })
+            .catch((error) => {
+              console.log(error.message);
+            });
+        });
       }
-    },
-    (error) => {
-      // Handle unsuccessful uploads
-      console.log(error);
-    },
-    () => {
-      uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-        console.log("File available at", downloadURL);
-        thisUser
-          .updateProfile({
-            photoURL: downloadURL,
-          })
-          .then(() => {
-            console.log("Profile successfully updated");
-          })
-          .catch((error) => {
-            console.log(error.message);
-          });
-      });
-    }
-  );
-let pp = document.getElementById("pp");
-pp.style.backgroundImage = thisUser.photoURL;
-}
+    );
+  }
+  
 
 let tweet = document.getElementById("tweet");
 let tweetTimeline = document.getElementById("tweetTimeline");
@@ -107,29 +116,29 @@ function formatTimestamp(timestamp) {
 }
 
 function postTweet(ev) {
-  ev.preventDefault();
-  let tweetData = {
-    tweet: tweet.value,
-    email: firebase.auth().currentUser.email,
-    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-  };
-  console.log(tweetData);
-
-  tweet.value = "";
-
-  // Add a new document in collection "tweets"
+    ev.preventDefault();
+    let tweetData = {
+      tweet: tweet.value,
+      email: firebase.auth().currentUser.email,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+    };
+    console.log(tweetData);
+  
+    tweet.value = "";
+  
+    // Add a new document in collection "tweets"
+    db.collection("tweets")
+      .doc()
+      .set(tweetData)
+      .then(() => {
+        console.log("Document successfully written!");
+      })
+      .catch((error) => {
+        console.error("Error writing document: ", error);
+      });
+  }
+  
   db.collection("tweets")
-    .doc()
-    .set(tweetData)
-    .then(() => {
-      console.log("Document successfully written!");
-    })
-    .catch((error) => {
-      console.error("Error writing document: ", error);
-    });
-}
-
-db.collection("tweets")
   .orderBy("timestamp", "desc")
   .onSnapshot((querySnapshot) => {
     tweetTimeline.innerHTML = "";
@@ -140,7 +149,7 @@ db.collection("tweets")
       let tweetElement = document.createElement("div");
       tweetElement.innerHTML = `<div class="user-tweet">
       <div user-pp>
-      <span class="pp"></span>
+      <img src="${avatar}" class="pp">
       </div>
 
       <div class="user-tweet-details">
@@ -156,7 +165,8 @@ db.collection("tweets")
       // Add the tweet element to the tweetTimeline element
       tweetTimeline.appendChild(tweetElement);
     });
-  })
-  .catch((error) => {
+  }, (error) => {
     console.error("Error getting tweets: ", error);
-  });
+  }); 
+  
+
