@@ -93,37 +93,7 @@ function login(ev) {
   // Show the loading div
   loadingDivL.style.display = "block";
 
-  // setTimeout(() => {
-  //   // Hide the loading div after 3 seconds
-  //   loadingDivL.style.display = "none";
 
-  //   // Get the email and password entered on the login page
-  //   let loginEmail = loginEmailInput.value;
-  //   let loginPassword = loginPasswordInput.value;
-
-  //   // Get the array of registered users from localStorage or create an empty array if it doesn't exist
-  //   let registeredUsers = JSON.parse(localStorage.getItem("members")) || [];
-
-  //   // Find the user object with the matching email and password
-  //   let user = registeredUsers.find(
-  //     (member) =>
-  //       member.email === loginEmail && member.password === loginPassword
-  //   );
-
-  //   if (user) {
-  //     // Redirect to the dashboard page and store the current user in localStorage
-  //     window.location.href = "messenger.html";
-  //     window.localStorage.setItem("currentUser", JSON.stringify(user));
-  //   } else {
-  //     // Display a failure message if the login credentials are invalid
-  //     loginMessage.innerHTML = `
-  //       <p id="failed-msg">Login failed! Please check your email and password.</p>
-  //     `;
-  //     setTimeout(() => {
-  //       loginMessage.style.display = "none";
-  //     }, 3000);
-  //   }
-  // }, 3000);
 
 
 

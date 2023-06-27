@@ -23,8 +23,10 @@ firebase.auth().onAuthStateChanged(function (user) {
     thisUser = user;
     let welcome = document.getElementById("welcome");
     welcome.innerHTML = `<h1>Welcome ${user.displayName}</h1>
-    
-    <img src="${user.photoURL} class="pp" width="50">`;
+    `
+
+    let profilePic = document.getElementById("profilePic");
+    profilePic.innerHTML = `<img src="${user.photoURL}" class="pp">`
   }
 });
 
